@@ -40,29 +40,30 @@ Access the server at http://localhost:3000.
 ### API Endpoints
    1. Generate Token
    Endpoint: POST /api/token
-   Request Body:
-      ```bash
-      {
-        "email": "your_email@example.com"
-      }
+      Request Body:
+         ```bash
+         {
+           "email": "your_email@example.com"
+         }
    Response:
+      ```bash 
+         {
+          "token": "your_jwt_token_here"
+         }
+         
+   2. Justify Text
+   Endpoint: POST /api/justify
+   Request Body: Plain text (Content-Type: text/plain).
+   Headers:
       ```bash
-      {
-        "token": "your_jwt_token_here"
-      }
-2. Justify Text
-Endpoint: POST /api/justify
-Request Body: Plain text (Content-Type: text/plain).
-Headers:
-makefile
-Copy code
-Authorization: Bearer your_jwt_token_here
-Response: Justified text in plain text format.
+      Authorization: Bearer your_jwt_token_here
+      Response: Justified text in plain text format.
+
 ## Rate Limiting
-Tokens are limited to 80,000 words per day. Exceeding this limit will return:
+      Tokens are limited to 80,000 words per day. Exceeding this limit will return:
       ```bash
       {
-        "error": "Payment required: daily limit exceeded"
+         "error": "Payment required: daily limit exceeded"
       }
 
 ## Deployment
@@ -74,9 +75,6 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 License
 This project is licensed under the ISC License.
-
-python
-Copy code
 
 ### Customization
 
