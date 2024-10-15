@@ -15,7 +15,20 @@ app.use(express.json());
 app.use('/api/auth', authRoutes); // For authentication
 app.use('/api', justifyRoutes);   // For text justification
 
+// Endpoint de vérification de la santé (optionnel)
+app.get('/api/health', (req, res) => {
+    res.status(200).send('API is running');
+});
+
+// Gestion des erreurs
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
 // Démarrer le serveur
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+export default app; // Exportez l'application pour Vercel
