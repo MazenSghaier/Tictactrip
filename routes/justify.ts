@@ -1,57 +1,61 @@
 import { Router, Request, Response } from 'express';
-import { rateLimit } from '../middlewares/rateLimit'; // Import the rate-limiting middleware
+import { rateLimit } from '../middlewares/rateLimit'; 
 
 const router = Router();
 
-// Apply rate limit middleware and JWT authentication for the justify route
+// Appliquer le middleware de limitation de débit et d'authentification JWT pour la route de justification
 router.post('/justify', rateLimit, (req: Request, res: Response) => {
-  const text = req.body; // Expecting text as a plain string
+  const text = req.body; 
 
+  // Vérifier si le texte est fourni et qu'il s'agit d'une chaîne
   if (!text || typeof text !== 'string') {
-    return res.status(400).json({ error: 'Text is required and must be a string' });
+    return res.status(400).json({ error: 'Le texte est requis et doit être une chaîne' });
   }
 
-  const justifiedText = justifyText(text);
-  res.send(justifiedText); // Return the justified text
+  const justifiedText = justifyText(text); // Justifier le texte
+  res.send(justifiedText); 
 });
 
-// Helper function to justify the text to 80 characters per line
+// Fonction auxiliaire pour justifier le texte à 80 caractères par ligne
 function justifyText(text: string): string {
-  const words = text.split(' ');
-  let lines: string[] = [];
-  let currentLine = '';
+  const words = text.split(' '); 
+  let lines: string[] = []; // Tableau pour stocker les lignes justifiées
+  let currentLine = ''; 
 
   words.forEach(word => {
+    // Vérifier si l'ajout du mot à la ligne actuelle dépasse la limite de 80 caractères
     if ((currentLine + word).length <= 80) {
-      currentLine += (currentLine ? ' ' : '') + word;
+      currentLine += (currentLine ? ' ' : '') + word; 
     } else {
       lines.push(justifyLine(currentLine));
-      currentLine = word;
+      currentLine = word; 
     }
   });
 
+  // Ajouter la dernière ligne justifiée, si elle existe
   if (currentLine) {
     lines.push(justifyLine(currentLine));
   }
 
-  return lines.join('\n');
+  return lines.join('\n'); // Retourner les lignes justifiées sous forme de chaîne
 }
 
-// Helper function to justify a single line
+// Fonction auxiliaire pour justifier une seule ligne
 function justifyLine(line: string): string {
-  const words = line.split(' ');
-  if (words.length === 1) return line; // If only one word, no justification needed
+  const words = line.split(' '); 
+  if (words.length === 1) return line;
 
   let totalSpaces = 80 - line.length;
-  let gaps = words.length - 1;
-  let spaceBetween = Math.floor(totalSpaces / gaps);
-  let extraSpaces = totalSpaces % gaps;
-
+  let gaps = words.length - 1; 
+  let spaceBetween = Math.floor(totalSpaces / gaps); 
+  let extraSpaces = totalSpaces % gaps; 
+  
+  // Ajouter les espaces supplémentaires aux premiers mots
   for (let i = 0; i < extraSpaces; i++) {
     words[i] += ' ';
   }
 
-  return words.join(' '.repeat(spaceBetween + 1));
+  return words.join(' '.repeat(spaceBetween + 1)); // Retourner la ligne justifiée
 }
 
 export default router;
