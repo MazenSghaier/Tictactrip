@@ -61,7 +61,6 @@ Access the server at http://localhost:3000.
 
 ## Rate Limiting
       Tokens are limited to 80,000 words per day. Exceeding this limit will return:
-      ```bash
       {
          "error": "Payment required: daily limit exceeded"
       }
